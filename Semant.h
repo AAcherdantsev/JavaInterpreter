@@ -33,7 +33,7 @@ struct Data
 
 struct Node
 {
-    Lexeme ID;
+    Lexeme id;
     Data data;
 
     int objectType;
@@ -47,14 +47,15 @@ class Tree
     Tree *parent;
     Tree *left;
     Tree *right;
+
     static Scanner *scanner;
 public:
     static bool flagInter;
     static Tree *current;
 
-    Tree   *findUp(Tree *from, Lexeme ID);
-    Tree   *findUpInsideOneArea(Tree *from, Lexeme ID);
-    Tree   *findUp(Lexeme ID);
+    Tree   *findUp(Tree *from, Lexeme lexeme);
+    Tree   *findUpInsideOneArea(Tree *from, Lexeme lexeme);
+    Tree   *findUp(Lexeme lexeme);
     void   showAllDataFromTree(Tree* tree);
     Tree   *getFirstParamOfFunc(Tree *func);
     Tree   *getLeft(Tree *elem);
@@ -70,32 +71,33 @@ public:
     void   print();
 
     Tree   *getCurrent();
-    Tree   *includeVar(Lexeme ID, DataType type);
-    Tree   *includeFunc(Lexeme ID, DataType type);
+    Tree   *includeVar(Lexeme lexeme, DataType type);
+    Tree   *includeFunc(Lexeme lexeme, DataType type);
     Tree   *makeScope();
     DataType getConstType(Lexeme constLexeme);
     Data   getExpressionType(Data firstType, Data secondType);
     void showVarInfo(DataType datatype, Lexeme lexeme);
-    void assignValueToVariable(Data expressionData, Lexeme variableID);
+    void assignValueToVariable(Data expressionData, Lexeme variableId);
     void showFuncInfo(Lexeme lexeme);
-    Node* getNode();
+    Node*  getNode();
     Data   getTypeByCastTable(Data firstType, Data  secondType);
-    Tree   *SemGetFunct(Lexeme a);
-    bool   IDcontrol(Tree *elem, Lexeme ID);
+    Tree*  semGetFunc(Lexeme lexeme);
+    bool   controlId(Tree *elem, Lexeme id);
     void   setCurrent(Tree *elem);
-    int    getVarType(Lexeme ID);
-    Data   getVarData(Lexeme ID);
-    Data   getFuncData(Lexeme ID);
-    Data   *getVar(Lexeme ID);
-    Node* getObjectFromTree(Lexeme ID);
-    DataValue getVarValue(Lexeme ID);
-    void   setVarValueAndType(Data newData, Lexeme ID);
-    void   setVarValue(Data newData, Lexeme ID);
-    int    getFunType(Lexeme ID);
-    void   SemSetParam(Tree* Addr, int num);
-    void   SemControlParam(Tree *Addr, int num);
-    bool   assigmentControl(DataType IDType, DataType expressionType);
+    int    getVarType(Lexeme id);
+    Data   getVarData(Lexeme id);
+    Data   getFuncData(Lexeme id);
+    Data   *getVar(Lexeme id);
+    Node* getObjectFromTree(Lexeme id);
+    DataValue getVarValue(Lexeme id);
+    void   setVarValueAndType(Data newData, Lexeme id);
+    void   setVarValue(Data newData, Lexeme id);
+    int    getFunType(Lexeme id);
+    void   SemSetParam(Tree* addr, int num);
+    void   SemControlParam(Tree *addr, int num);
+    bool   assigmentControl(DataType typeId, DataType expressionType);
     static void setScanner(Scanner *scanner);
+
     Tree(Tree *left, Tree *right, Tree *parent, Node *data);
     Tree();
     ~Tree();

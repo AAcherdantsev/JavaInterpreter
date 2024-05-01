@@ -22,13 +22,13 @@ private:
     void variablesList(DataType dataType);
     void variables(DataType dataType);
     Data function(bool needToInterpActions);
-    int  varForFunc(Tree * treeFunc);
+    int  varForFunc(Tree *treeFunc);
     Data compositeOperator();
     Data operatorsAndDescription();
     Data operatorD();
     void assigment();
     Data functionCall();
-    int  listOfExpression(Tree *func);
+    int  listOfExpression(Tree *treeFunc);
     Data loop();
 
     Data expression();

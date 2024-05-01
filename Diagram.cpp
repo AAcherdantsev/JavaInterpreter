@@ -3,7 +3,7 @@
 
 Data operator /(Data v1, Data v2)
 {
-    Data result;
+    Data result{};
     result.typeOfData = v1.typeOfData;
 
     if (v1.typeOfData == TYPE_SHORT_INT)
@@ -17,7 +17,7 @@ Data operator /(Data v1, Data v2)
 
 Data operator *(Data v1, Data v2)
 {
-    Data result;
+    Data result{};
     result.typeOfData = v1.typeOfData;
 
     if (v1.typeOfData == TYPE_SHORT_INT)
@@ -31,7 +31,7 @@ Data operator *(Data v1, Data v2)
 
 Data operator -(Data v1, Data v2)
 {
-    Data result;
+    Data result{};
     result.typeOfData = v1.typeOfData;
 
     if (v1.typeOfData == TYPE_SHORT_INT)
@@ -44,7 +44,7 @@ Data operator -(Data v1, Data v2)
 
 Data operator +(Data v1, Data v2)
 {
-    Data result;
+    Data result{};
     result.typeOfData = v1.typeOfData;
 
     if (v1.typeOfData == TYPE_SHORT_INT)
@@ -58,7 +58,7 @@ Data operator +(Data v1, Data v2)
 
 Data operator -(Data v1)
 {
-    Data result;
+    Data result{};
     result.typeOfData = v1.typeOfData;
     if (v1.typeOfData == TYPE_SHORT_INT)
     {
@@ -642,7 +642,7 @@ Data Diagram::functionCall()
     {
         Lexeme identifier;
         strcpy(identifier, lexeme);
-        Tree* func = root->SemGetFunct(identifier);
+        Tree* func = root->semGetFunc(identifier);
         type = scanner->scan(lexeme);
         if (type == TYPE_OPEN_PARENTHESES)
         {
@@ -663,15 +663,15 @@ Data Diagram::functionCall()
             pointerForFuncCall = scanner->getPointer();
             scanner->setPointer(root->getObjectFromTree(identifier)->pointerForFunc);
 
-            int amountParam = root->SemGetFunct(identifier)->getNode()->amountVarForFunc;
+            int amountParam = root->semGetFunc(identifier)->getNode()->amountVarForFunc;
             Tree* param = nullptr;
             if (amountParam == 0)
             {
-                param = root->SemGetFunct(identifier);
+                param = root->semGetFunc(identifier);
             }
             else
             {
-                param = root->SemGetFunct(identifier)->getRight();
+                param = root->semGetFunc(identifier)->getRight();
                 for (int i = 0; i < amountParam; i++)
                     param = param->getLeft();
             }
@@ -790,7 +790,6 @@ Data Diagram::loop()
 
 Data Diagram::expression()
 {
-
     Data firstData = logAnd();
     Data secondData;
     Lexeme lexeme;
@@ -1081,9 +1080,9 @@ Data Diagram::elementaryExpression()
         if (type == TYPE_CONST_HEX)
         {
             if (result.typeOfData == TYPE_SHORT_INT)
-                result.valueOfData.dataForShort = static_cast<const int>(strtol(lexeme, NULL, 16));
+                result.valueOfData.dataForShort = static_cast<const int>(strtol(lexeme, nullptr, 16));
             if (result.typeOfData == TYPE_LONG_INT)
-                result.valueOfData.dataForLong = static_cast<const int>(strtol(lexeme, NULL, 16));
+                result.valueOfData.dataForLong = static_cast<const int>(strtol(lexeme, nullptr, 16));
         }
         else if (type == TYPE_CONST_DECIMAL)
         {
@@ -1118,7 +1117,7 @@ Data Diagram::elementaryExpression()
         else
             setAll(secondReadPointer, secondReadLine, secondReadColumn);
 
-        Data result;
+        Data result{};
         result.typeOfData = (DataType)root->getVarType(identifier);
         result.valueOfData = root->getVarValue(identifier);
         return result;

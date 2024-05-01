@@ -145,12 +145,12 @@ int Scanner::scan(Lexeme lexeme)
             currentColumn++;
         }
         if (index == MAX_LEXEME_SIZE - 1)
-            printError("The lexem is too long. It was shortened", "");
+            printError("The lexeme is too long. It was shortened", "");
 
         return TYPE_CONST_DECIMAL;
     }
 
-    // Identificator
+    // identifier
     else if ((text[pointer] >= 'a') && (text[pointer] <= 'z') ||
              (text[pointer] >= 'A') && (text[pointer] <= 'Z') ||
              text[pointer] == '_') {

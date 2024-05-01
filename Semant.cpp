@@ -2,7 +2,7 @@
 #include <iostream>
 #include "Semant.h"
 
-#define TYPE_EMPTY -1
+#define TYPE_EMPTY (-1)
 
 Tree::Tree(Tree *left, Tree *right, Tree *parent, Node *data)
 {
@@ -64,7 +64,7 @@ Tree* Tree::getRight()
 
 Lexeme* Tree::getFuncName(Tree * func)
 {
-    return &(func->node->ID);
+    return &(func->node->id);
 }
 
 void Tree::setLeft(Node *data)
@@ -83,9 +83,9 @@ void Tree::deleteVariables(Tree* tree)
 {
     if (!flagInter) return;
 
-    if (tree == NULL) return;
+    if (tree == nullptr) return;
 
-    if (strcmp(tree->node->ID, "-root-") == 0)
+    if (strcmp(tree->node->id, "-root-") == 0)
     {
         destroyLocalTree(tree->right);
         destroyLocalTree(tree->left);
@@ -110,18 +110,18 @@ void Tree::deleteVariables(Tree* tree)
 
 void Tree::destroyLocalTree(Tree* tree)
 {
-    if (tree != NULL)
+    if (tree != nullptr)
     {
-        if (tree->left != NULL)
+        if (tree->left != nullptr)
             destroyLocalTree(tree->left);
 
-        if (tree->right != NULL)
+        if (tree->right != nullptr)
             destroyLocalTree(tree->right);
 
-        if (tree->parent != NULL)
+        if (tree->parent != nullptr)
         {
-            tree->parent->left = NULL;
-            tree->parent->right = NULL;
+            tree->parent->left = nullptr;
+            tree->parent->right = nullptr;
         }
 
         free(tree);
@@ -133,43 +133,43 @@ Tree *Tree::findUp(Tree *fromNode, Lexeme ID)
     Tree *result = fromNode;
 
     while ((result != nullptr) &&
-           (strcmp(ID, result->node->ID) != 0))
+           (strcmp(ID, result->node->id) != 0))
         result = result->parent;
 
     return result;
 }
 
-Tree *Tree::findUpInsideOneArea(Tree *from, Lexeme ID)
+Tree *Tree::findUpInsideOneArea(Tree *from, Lexeme id)
 {
     Tree *result = from;
 
     while ((result != nullptr) && (result->parent != nullptr) && (result->parent->right != result)) {
-        if (memcmp(ID, result->node->ID,
-                   max(strlen(ID), strlen(result->node->ID))) == 0)
+        if (memcmp(id, result->node->id,
+                   max(strlen(id), strlen(result->node->id))) == 0)
             return result;
         result = result->parent;
     }
     return nullptr;
 }
 
-Tree *Tree::findUp(Lexeme ID)
+Tree *Tree::findUp(Lexeme id)
 {
-    return findUp(this, ID);
+    return findUp(this, id);
 }
 
 
 void Tree::showAllDataFromTree(Tree *tree)
 {
-    if (tree != NULL)
+    if (tree != nullptr)
     {
-        if (strcmp(tree->node->ID, "-empty-") != 0)
+        if (strcmp(tree->node->id, "-empty-") != 0)
         {
             if (tree->node->data.typeOfData == TYPE_LONG_INT)
-                cout << tree->node->ID << " = " << tree->node->data.valueOfData.dataForLong << ";   ";
+                cout << tree->node->id << " = " << tree->node->data.valueOfData.dataForLong << ";   ";
             else if (tree->node->data.typeOfData == TYPE_SHORT_INT)
-                cout << tree->node->ID << " = " << tree->node->data.valueOfData.dataForShort << ";   ";
+                cout << tree->node->id << " = " << tree->node->data.valueOfData.dataForShort << ";   ";
             else
-                cout << tree->node->ID << " = " << tree->node->data.valueOfData.dataForLong << ";   ";/////////
+                cout << tree->node->id << " = " << tree->node->data.valueOfData.dataForLong << ";   ";/////////
         }
         showAllDataFromTree(tree->left);
         showAllDataFromTree(tree->right);
@@ -179,18 +179,18 @@ void Tree::showAllDataFromTree(Tree *tree)
 void Tree::print()
 {
     cout << "NODE: ";
-    cout << node->ID;
+    cout << node->id;
     cout << " =====> ";
 
     if (left != nullptr)
     {
         cout << " LEFT: ";
-        cout << left->node->ID;
+        cout << left->node->id;
     }
     if (right != nullptr)
     {
         cout << " RIGHT: ";
-        cout << right->node->ID;
+        cout << right->node->id;
     }
     cout << endl;
     if (left != nullptr)
@@ -209,13 +209,13 @@ Tree*Tree::getCurrent()
     return current;
 }
 
-Tree *Tree::includeVar(Lexeme ID, DataType type)
+Tree *Tree::includeVar(Lexeme id, DataType type)
 {
-    if (IDcontrol(current, ID))
-        scanner->printError("A function / variable with this name already exists", ID);
+    if (controlId(current, id))
+        scanner->printError("A function / variable with this name already exists", id);
 
     Node *tempElement = new Node();
-    memcpy(tempElement->ID, ID, strlen(ID) + 1);
+    memcpy(tempElement->id, id, strlen(id) + 1);
 
     tempElement->data.typeOfData  = type;
     tempElement->objectType = TYPE_VARIABLE;
@@ -230,12 +230,13 @@ Tree *Tree::includeVar(Lexeme ID, DataType type)
     return current;
 }
 
-Tree *Tree::includeFunc(Lexeme ID, DataType type)
+Tree *Tree::includeFunc(Lexeme id, DataType type)
 {
-    if (IDcontrol(current, ID))
-        scanner->printError("A function / variable with this name already exists", ID);
+    if (controlId(current, id))
+        scanner->printError("A function / variable with this name already exists", id);
+
     Node *tempElement = new Node();
-    memcpy(tempElement->ID, ID, strlen(ID) + 1);
+    memcpy(tempElement->id, id, strlen(id) + 1);
     tempElement->data.typeOfData = type;
     tempElement->objectType = TYPE_FUNCTION;
 
@@ -249,7 +250,7 @@ Tree *Tree::includeFunc(Lexeme ID, DataType type)
     current = current->left;
     Tree *result = current;
     Node *empty = new Node();
-    memcpy(empty->ID, &"-empty-", strlen("-empty-") + 1);
+    memcpy(empty->id, &"-empty-", strlen("-empty-") + 1);
     empty->data.typeOfData = TYPE_UNKNOWN;
     empty->objectType = TYPE_EMPTY;
     empty->data.valueOfData.dataForLong = NULL;
@@ -261,7 +262,7 @@ Tree *Tree::includeFunc(Lexeme ID, DataType type)
 Tree *Tree::makeScope()
 {
     Node *emptyNode = new Node();
-    memcpy(emptyNode->ID, &"-empty-", strlen("-empty-") + 1);
+    memcpy(emptyNode->id, &"-empty-", strlen("-empty-") + 1);
     emptyNode->data.typeOfData = TYPE_UNKNOWN;
     emptyNode->objectType = TYPE_EMPTY;
     emptyNode->data.valueOfData.dataForLong = NULL;
@@ -273,8 +274,8 @@ Tree *Tree::makeScope()
     return pointer;
 }
 
-bool Tree::IDcontrol(Tree *elem, Lexeme ID) {
-    if (findUpInsideOneArea(elem, ID) == nullptr)
+bool Tree::controlId(Tree *elem, Lexeme id) {
+    if (findUpInsideOneArea(elem, id) == nullptr)
         return false;
     return true;
 }
@@ -290,91 +291,86 @@ DataType Tree::getConstType(Lexeme constLexeme)
         return TYPE_LONG_INT;
 }
 
-int Tree::getVarType(Lexeme ID)
+int Tree::getVarType(Lexeme id)
 {
-    Tree *result = this->findUp(this->getCurrent(), ID);
+    Tree *result = this->findUp(this->getCurrent(), id);
 
     if (result == nullptr)
-        scanner->printError("Identifier was not declared", ID);
+        scanner->printError("Identifier was not declared", id);
 
     if (result->node->objectType == TYPE_FUNCTION)
-        scanner->printError("Identifier is declared as a function", ID);
+        scanner->printError("Identifier is declared as a function", id);
 
     return result->node->data.typeOfData;
 }
 
-Data Tree::getVarData(Lexeme ID)
+Data Tree::getVarData(Lexeme id)
 {
-    Tree* result = this->findUp(this->getCurrent(), ID);
+    Tree* result = this->findUp(this->getCurrent(), id);
 
     if (result == nullptr)
-        scanner->printError("Identifier was not declared", ID);
+        scanner->printError("Identifier was not declared", id);
 
     if (result->node->objectType == TYPE_FUNCTION)
-        scanner->printError("Identifier is declared as a function", ID);
+        scanner->printError("Identifier is declared as a function", id);
 
     return result->node->data;
 }
 
-Data Tree::getFuncData(Lexeme ID)
+Data Tree::getFuncData(Lexeme id)
 {
-    Tree* result = this->findUp(this->getCurrent(), ID);
+    Tree* result = this->findUp(this->getCurrent(), id);
 
     if (result == nullptr)
-        scanner->printError("Identifier was not declared", ID);
+        scanner->printError("Identifier was not declared", id);
 
     if (result->node->objectType == TYPE_VARIABLE)
-        scanner->printError("Identifier is declared as a variable", ID);
+        scanner->printError("Identifier is declared as a variable", id);
 
     return result->node->data;
 }
 
-Data* Tree::getVar(Lexeme ID)
+Data* Tree::getVar(Lexeme id)
 {
-    Tree* result = this->findUp(this->getCurrent(), ID);
+    Tree* result = this->findUp(this->getCurrent(), id);
 
     if (result == nullptr)
-        scanner->printError("Identifier was not declared", ID);
+        scanner->printError("Identifier was not declared", id);
 
     if (result->node->objectType == TYPE_FUNCTION)
-        scanner->printError("Identifier is declared as a function", ID);
+        scanner->printError("Identifier is declared as a function", id);
 
     return &result->node->data;
 }
 
-
-Node* Tree::getObjectFromTree(Lexeme ID)
+Node* Tree::getObjectFromTree(Lexeme id)
 {
-    Tree* result = this->findUp(this->getCurrent(), ID);
+    Tree* result = this->findUp(this->getCurrent(), id);
     return result->node;
 }
 
-
-DataValue Tree::getVarValue(Lexeme ID)
+DataValue Tree::getVarValue(Lexeme id)
 {
-    Tree* result = this->findUp(this->getCurrent(), ID);
+    Tree* result = this->findUp(this->getCurrent(), id);
 
     if (result == nullptr)
-        scanner->printError("Identifier was not declared", ID);
+        scanner->printError("Identifier was not declared", id);
 
     if (result->node->objectType == TYPE_FUNCTION)
-        scanner->printError("Identifier is declared as a function", ID);
-
+        scanner->printError("Identifier is declared as a function", id);
 
     return result->node->data.valueOfData;
-
 }
 
-void Tree::setVarValueAndType(Data newData, Lexeme ID)
+void Tree::setVarValueAndType(Data newData, Lexeme id)
 {
-
-    Tree* result = this->findUp(this->getCurrent(), ID);
+    Tree* result = this->findUp(this->getCurrent(), id);
 
     if (result == nullptr)
-        scanner->printError("Identifier was not declared", ID);
+        scanner->printError("Identifier was not declared", id);
 
     if (result->node->objectType == TYPE_FUNCTION)
-        scanner->printError("Identifier is declared as a function", ID);
+        scanner->printError("Identifier is declared as a function", id);
 
     result->node->data.typeOfData = newData.typeOfData;
     if (newData.typeOfData == TYPE_SHORT_INT)
@@ -384,15 +380,15 @@ void Tree::setVarValueAndType(Data newData, Lexeme ID)
         result->node->data.valueOfData.dataForLong = newData.valueOfData.dataForLong;
 }
 
-void Tree::setVarValue(Data newData, Lexeme ID)
+void Tree::setVarValue(Data newData, Lexeme id)
 {
-    Tree* result = this->findUp(this->getCurrent(), ID);
+    Tree* result = this->findUp(this->getCurrent(), id);
 
     if (result == nullptr)
-        scanner->printError("Identifier was not declared", ID);
+        scanner->printError("Identifier was not declared", id);
 
     if (result->node->objectType == TYPE_FUNCTION)
-        scanner->printError("Identifier is declared as a function", ID);
+        scanner->printError("Identifier is declared as a function", id);
 
     if (result->node->data.typeOfData == TYPE_SHORT_INT)
     {
@@ -409,13 +405,13 @@ void Tree::setVarValue(Data newData, Lexeme ID)
     }
 }
 
-int Tree::getFunType(Lexeme ID) {
-    Tree *result = this->findUp(this->getCurrent(), ID);
+int Tree::getFunType(Lexeme id) {
+    Tree *result = this->findUp(this->getCurrent(), id);
     if (result == nullptr)
-        scanner->printError("Identifier was not declared", ID);
+        scanner->printError("Identifier was not declared", id);
 
     if (result->node->objectType == TYPE_VARIABLE)
-        scanner->printError("Identifier is declared as a variable", ID);
+        scanner->printError("Identifier is declared as a variable", id);
 
     return result->node->data.typeOfData;
 }
@@ -458,20 +454,20 @@ void Tree::showVarInfo(DataType dataType, Lexeme lexeme)
     if (dataType == TYPE_BOOLEAN)
         cout << " (boolean) ";
     if (dataType == TYPE_UNKNOWN)
-        cout << " (unknow)  ";
+        cout << " (unknown)  ";
     cout << lexeme << endl;
 }
 
 
-void Tree::assignValueToVariable(Data expressionData, Lexeme variableID)
+void Tree::assignValueToVariable(Data expressionData, Lexeme variableId)
 {
     if (!flagInter) return;
 
-    DataType variableType = (DataType) getVarType(variableID);
+    DataType variableType = (DataType) getVarType(variableId);
     assigmentControl(variableType, expressionData.typeOfData);
-    setVarValueAndType(getTypeByCastTable(getVarData(variableID), expressionData), variableID);
-    variableType = (DataType) getVarType(variableID);
-    setVarValue(expressionData, variableID);
+    setVarValueAndType(getTypeByCastTable(getVarData(variableId), expressionData), variableId);
+    variableType = (DataType) getVarType(variableId);
+    setVarValue(expressionData, variableId);
 
     cout << "Assignment variable: ";
     if (variableType == TYPE_SHORT_INT)
@@ -481,12 +477,12 @@ void Tree::assignValueToVariable(Data expressionData, Lexeme variableID)
     if (variableType == TYPE_BOOLEAN)
         cout << " (boolean) ";
     if (variableType == TYPE_UNKNOWN)
-        cout << " (unknow)  ";
-    cout << variableID << " = ";
+        cout << " (unknown)  ";
+    cout << variableId << " = ";
     if (variableType == TYPE_SHORT_INT)
-        cout << getVarValue(variableID).dataForShort << endl;
+        cout << getVarValue(variableId).dataForShort << endl;
     if (variableType == TYPE_LONG_INT)
-        cout << getVarValue(variableID).dataForLong << endl;
+        cout << getVarValue(variableId).dataForLong << endl;
 }
 
 void Tree::showFuncInfo(Lexeme lexeme)
@@ -500,7 +496,7 @@ void Tree::showFuncInfo(Lexeme lexeme)
     if (dataType == TYPE_BOOLEAN)
         cout << " (boolean) " << endl;
     if (dataType == TYPE_UNKNOWN)
-        cout << " (unknow)  " << endl;
+        cout << " (unknown)  " << endl;
 }
 
 Node* Tree::getNode()
@@ -553,27 +549,27 @@ bool Tree::assigmentControl(DataType IDType, DataType expressionType)
     return false;
 }
 
-void Tree::SemSetParam(Tree* Addr, int num)
+void Tree::SemSetParam(Tree* addr, int num)
 {
-    Addr->node->amountVarForFunc = num;
+    addr->node->amountVarForFunc = num;
 }
 
-void Tree::SemControlParam(Tree *Addr, int num)
+void Tree::SemControlParam(Tree *addr, int num)
 {
     if (!flagInter) return;
-    if (num != Addr->node->amountVarForFunc)
-        Tree::scanner->printError("Invalid number of parameters for the function ", Addr->node->ID);
+    if (num != addr->node->amountVarForFunc)
+        Tree::scanner->printError("Invalid number of parameters for the function ", addr->node->id);
 }
 
-Tree * Tree::SemGetFunct(Lexeme a)
+Tree * Tree::semGetFunc(Lexeme lexeme)
 {
-    Tree * v = findUp(current, a);
+    Tree * v = findUp(current, lexeme);
 
-    if (v == NULL)
-        Tree::scanner->printError("Missing function description ", a);
+    if (v == nullptr)
+        Tree::scanner->printError("Missing function description ", lexeme);
 
     if (v->node->objectType != TYPE_FUNCTION)
-        Tree::scanner->printError("ID is not a function ", a);
+        Tree::scanner->printError("ID is not a function ", lexeme);
     return v;
 }
 

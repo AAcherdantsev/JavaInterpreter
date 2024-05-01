@@ -62,8 +62,4 @@ enum type
     TYPE_ERROR = 200
 };
 
-
-#define ERROR_DATA ""
-
-
 #endif //JAVAINTERPRETER_DEFS_H
