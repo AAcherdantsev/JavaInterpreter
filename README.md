@@ -1,9 +1,9 @@
-Java Interpreter in C++: Limited Implementation with Syntax Tree
+Java Interpreter in C++: Limited Implementation with Semantic Tree
 
 Project Description:
 In 2020, a limited interpreter for the Java programming language was developed using C++. 
 This project was undertaken as part of studying various grammars and formal language theory. 
-In addition to program interpretation, a syntax tree was added to visualize the program structure.
+In addition to program interpretation, a semantic tree was added to visualize the program structure.
 
 Key Features:
 
